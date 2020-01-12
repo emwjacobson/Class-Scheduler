@@ -10,12 +10,14 @@ import { HomeComponent } from './pages/home/home.component';
 import { StudentsComponent } from './pages/students/students.component';
 import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { ClassesComponent } from './pages/classes/classes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    StudentsComponent
+    StudentsComponent,
+    ClassesComponent
   ],
   imports: [
     BrowserModule,
