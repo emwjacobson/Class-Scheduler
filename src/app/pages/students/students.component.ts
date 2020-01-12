@@ -15,21 +15,20 @@ export class StudentsComponent implements OnInit {
   query: string;
 
   constructor(private ss: StudentService) {
-    ss.getAllStudents().subscribe((s: DocumentChangeAction<Student>[]) => {
-      this.all_students = s.map<Student>((stu: DocumentChangeAction<Student>) => {
-        return { name: stu.payload.doc.data().name,
-                 birthday: stu.payload.doc.data().birthday,
-                 id: stu.payload.doc.id };
-      });
+    ss.getAllStudents().subscribe((students: Student[]) => {
+      this.all_students = students;
+      // Known problem: When a new student is added mid search, search will show all students instead of
+      // just the filtered results. Minor problem but it annoys me :/
       this.filtered_students = this.all_students;
     });
   }
 
   ngOnInit() {
+    this.filtered_students = this.all_students;
   }
 
   addStudent(): void {
-    console.log("Add Student");
+    console.log("Implement add Student");
   }
 
   getStudents(): Student[] {
