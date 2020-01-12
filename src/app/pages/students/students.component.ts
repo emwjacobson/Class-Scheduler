@@ -29,11 +29,10 @@ export class StudentsComponent implements OnInit {
   }
 
   addStudent(): void {
-    
+    console.log("Add Student");
   }
 
   getStudents(): Student[] {
-    console.log(this.filtered_students);
     return this.filtered_students;
   }
 
@@ -43,7 +42,7 @@ export class StudentsComponent implements OnInit {
       this.filtered_students = this.all_students;
     }
     else {
-      this.filtered_students = this.all_students.filter((s: Student) => s.name.includes(this.query));
+      this.filtered_students = this.all_students.filter((s: Student) => s.name.toLowerCase().indexOf(this.query.toLowerCase()) >= 0);
     }
   }
 
