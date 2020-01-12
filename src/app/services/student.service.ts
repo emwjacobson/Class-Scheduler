@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction } from '@angular/fire/firestore';
 import { Student } from '../classes/student';
 import { Observable } from 'rxjs';
 
@@ -9,14 +9,14 @@ import { Observable } from 'rxjs';
 export class StudentService {
 
   private studentCollection: AngularFirestoreCollection<Student>;
-  private students: Observable<Student[]>;
+  private students: Observable<DocumentChangeAction<Student>[]>;
 
   constructor(private afs: AngularFirestore) {
     this.studentCollection = afs.collection<Student>('students');
-    this.students = this.studentCollection.valueChanges();
+    this.students = this.studentCollection.snapshotChanges();
   }
 
-  public getAllStudents(): Observable<Student[]> {
+  public getAllStudents(): Observable<DocumentChangeAction<Student>[]> {
     return this.students;
   }
 
