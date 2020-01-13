@@ -11,6 +11,7 @@ import { StudentsComponent } from './pages/students/students.component';
 import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ClassesComponent } from './pages/classes/classes.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ClassesComponent } from './pages/classes/classes.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     SidebarModule.forRoot(),
     FontAwesomeModule,
     AngularFireModule.initializeApp(environment.firebase),

@@ -13,9 +13,22 @@
                     <br/>
 
                     <div class="row">
-                        <!-- <div class="col-md-3" *ngFor="let c of classes">
-                            {{ c.name }}
-                        </div> -->
+                        <div class="col-md-4" *ngFor="let c of all_classes">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ c.name }}</h5>
+                                    <p class="card-text">
+                                        Ages: {{ getAgeString(c.age_group) }}<br/>
+                                        Category: {{ getCategoryString(c.category) }}
+                                    </p>
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-danger"
+                                                data-toggle="modal" data-target="#deleteModal"
+                                                (click)="preDelete(c)">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -23,6 +36,7 @@
     </div>
 </div>
 
+<!-- Add Class Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -33,11 +47,60 @@
             </button>
         </div>
         <div class="modal-body">
-            TODO: Add form for class.
+            <form [formGroup]="add_class_form" (ngSubmit)="addClass()">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="className">Name</label>
+                        <input required type="text" id="className" class="form-control"
+                               formControlName="name" placeholder="ex. Robot Dinosaur">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="categorySelect">Category</label>
+                        <select required class="form-control" id="categorySelect" formControlName="age_group">
+                            <option *ngFor="let age of getAgeMapping()" [value]="age.id">{{ age.name }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ageSelect">Age Group</label>
+                        <select required class="form-control" id="ageSelect" formControlName="category">
+                            <option *ngFor="let cat of getCategoryMapping()" [value]="cat.id">{{ cat.name }}</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal"
-                    (click)="addClass()">Add</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal"
+                    [disabled]="!add_class_form.valid" (click)="addClass()">Add</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete class modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" *ngIf="pre_delete != undefined">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Are you sure?</h5>
+            <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            You are about to delete<br/>
+            <b>
+            {{ pre_delete.name }}<br/>
+            {{ getCategoryString(pre_delete.category) }}<br/>
+            {{ getAgeString(pre_delete.age_group) }}<br/>
+            </b>
+            Are you sure?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    (click)="deleteClass()">Delete</button>
         </div>
         </div>
     </div>

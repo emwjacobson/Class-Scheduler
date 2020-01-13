@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction, DocumentChange } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction, DocumentChange, DocumentReference } from '@angular/fire/firestore';
 import { Student } from '../classes/student';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -21,17 +21,27 @@ export class StudentService {
 
     this.students = this.studentCollection.snapshotChanges().pipe(
       map((doc) => doc.map<Student>((d: DocumentChangeAction<Student>) => {
-        return { ...d.payload.doc.data(), id: d.payload.doc.id };
+        return {
+          ...d.payload.doc.data(),
+          id: d.payload.doc.id,
+          ref: d.payload.doc.ref
+        };
       }))
     );
 
     this.classCollection = afs.collection<Class>('classes');
     this.classes = this.classCollection.snapshotChanges().pipe(
       map((doc) => doc.map<Class>((d: DocumentChangeAction<Class>) => {
-        return { ...d.payload.doc.data(), id: d.payload.doc.id };
+        return {
+          ...d.payload.doc.data(),
+          id: d.payload.doc.id,
+          ref: d.payload.doc.ref
+        };
       }))
     )
   }
+
+  // Student Functions
 
   public getAllStudents(): Observable<Student[]> {
     return this.students;
@@ -41,11 +51,47 @@ export class StudentService {
     console.log('Implement addStudent in StudentService.');
   }
 
+  // Class Functions
+
   public getAllClasses(): Observable<Class[]> {
     return this.classes;
   }
 
-  public addClass(c: Class): void {
-    console.log('Implement addClass in StudentService.');
+  public addClass(c: Class): Promise<DocumentReference> {
+    return this.classCollection.add(c);
+  }
+
+  private age_mappings = [
+    { id: 1, name: 'Rookies (3-5)' },
+    { id: 2, name: 'Explorers (6-8)' },
+    { id: 3, name: 'Pioneers (9-11)' },
+    { id: 4, name: 'Innovators (12+)' }
+  ];
+
+  public getAgeMapping(): Object[] {
+    return this.age_mappings;
+  }
+
+  public getAgeString(n: number): string {
+    let age = this.age_mappings.find(val => val.id == n);
+    return (age == undefined) ? 'Unknown ID: ' + n : age.name;
+  }
+
+  private group_mappings = [
+    { id: 1, name: 'Wonder' },
+    { id: 2, name: 'Ollo' },
+    { id: 3, name: 'EV3' },
+    { id: 4, name: 'VEX' },
+    { id: 5, name: 'Cubit' },
+    { id: 6, name: 'Scratch' },
+  ];
+
+  public getCategoryMapping(): Object[] {
+    return this.group_mappings;
+  }
+
+  public getCategoryString(n: number): string {
+    let cat = this.group_mappings.find(val => val.id == n);
+    return (cat == undefined) ? 'Unknown ID: ' + n : cat.name;
   }
 }

@@ -14,17 +14,15 @@ export class StudentsComponent implements OnInit, OnDestroy {
   filtered_students: Student[];
   student_sub: Subscription;
 
-  constructor(private ss: StudentService) {
-    this.student_sub = ss.getAllStudents().subscribe((students: Student[]) => {
+  constructor(private ss: StudentService) { }
+
+  ngOnInit() {
+    this.student_sub = this.ss.getAllStudents().subscribe((students: Student[]) => {
       this.all_students = students;
       // Known problem: When a new student is added mid search, search will show all students instead of
       // just the filtered results. Minor problem but it annoys me :/
       this.filtered_students = this.all_students;
     });
-  }
-
-  ngOnInit() {
-    this.filtered_students = this.all_students;
   }
 
   ngOnDestroy() {
