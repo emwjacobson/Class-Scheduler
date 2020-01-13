@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { StudentService } from 'src/app/services/student.service';
 import { Student } from 'src/app/classes/student';
-import { DocumentChangeAction } from '@angular/fire/firestore';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-students',
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.less']
 })
-export class StudentsComponent implements OnInit {
+export class StudentsComponent implements OnInit, OnDestroy {
 
   all_students: Student[];
   filtered_students: Student[];
-  query: string;
+  student_sub: Subscription;
 
   constructor(private ss: StudentService) {
-    ss.getAllStudents().subscribe((students: Student[]) => {
+    this.student_sub = ss.getAllStudents().subscribe((students: Student[]) => {
       this.all_students = students;
       // Known problem: When a new student is added mid search, search will show all students instead of
       // just the filtered results. Minor problem but it annoys me :/
@@ -27,6 +27,10 @@ export class StudentsComponent implements OnInit {
     this.filtered_students = this.all_students;
   }
 
+  ngOnDestroy() {
+    this.student_sub.unsubscribe();
+  }
+
   addStudent(): void {
     console.log("Implement add Student");
   }
@@ -36,12 +40,12 @@ export class StudentsComponent implements OnInit {
   }
 
   updateStudents(e: KeyboardEvent): void {
-    this.query = (e.target as HTMLInputElement).value;
-    if (this.query == '') {
+    let query = (e.target as HTMLInputElement).value;
+    if (query == '') {
       this.filtered_students = this.all_students;
     }
     else {
-      this.filtered_students = this.all_students.filter((s: Student) => s.name.toLowerCase().indexOf(this.query.toLowerCase()) >= 0);
+      this.filtered_students = this.all_students.filter((s: Student) => s.name.toLowerCase().indexOf(query.toLowerCase()) >= 0);
     }
   }
 
