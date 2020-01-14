@@ -25,6 +25,8 @@ export class StudentsComponent implements OnInit, OnDestroy {
   class_sub: Subscription;
   add_class_form: FormGroup;
 
+  form_sub: Subscription;
+
   constructor(private ss: StudentService) { }
 
   ngOnInit() {
@@ -65,7 +67,7 @@ export class StudentsComponent implements OnInit, OnDestroy {
       this.filtered_classes = classes;
     });
 
-    this.add_class_form.valueChanges.subscribe((e: {age_group: string, category: string, name: string}) => {
+    this.form_sub = this.add_class_form.valueChanges.subscribe((e: {age_group: string, category: string, name: string}) => {
       console.log('Form change fired');
       // Remove results when a user selects both an age and category,
       // otherwise keep all results.
@@ -81,6 +83,7 @@ export class StudentsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.student_sub.unsubscribe();
     this.class_sub.unsubscribe();
+    this.form_sub.unsubscribe();
   }
 
   private filterTaken(): void {

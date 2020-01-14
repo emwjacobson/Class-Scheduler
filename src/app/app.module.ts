@@ -12,13 +12,15 @@ import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ClassesComponent } from './pages/classes/classes.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PickerComponent } from './pages/picker/picker.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     StudentsComponent,
-    ClassesComponent
+    ClassesComponent,
+    PickerComponent
   ],
   imports: [
     BrowserModule,

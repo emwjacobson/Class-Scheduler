@@ -1,0 +1,39 @@
+<div class="container" style="padding-top: 10px">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Student Name"
+                   (keyup)="updateStudents($event)">
+            <br/>
+            <div *ngIf="filtered_students.length > 0">Search</div>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let student of filtered_students"
+                    (click)="selectStudent(student)">
+                    {{ student.name }}
+                </li>
+            </ul>
+            <br/>
+            <div *ngIf="selected_students.length > 0">Selected Students</div>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let student of selected_students">
+                    {{ student.name }}
+                    <span class="badge badge-danger" (click)="removeStudent(student)">X</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-4" *ngFor="let class of filtered_classes">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ class.name }}</h5>
+                            <div class="card-text">
+                                {{ getAgeString(class.age_group) }}<br/>
+                                {{ getCategoryString(class.category) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
