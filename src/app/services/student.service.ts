@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction, DocumentChange, DocumentReference } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction, DocumentChange, DocumentReference, DocumentData } from '@angular/fire/firestore';
 import { Student } from '../classes/student';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -21,8 +21,10 @@ export class StudentService {
 
     this.students = this.studentCollection.snapshotChanges().pipe(
       map((doc) => doc.map<Student>((d: DocumentChangeAction<Student>) => {
+        let bd = <any>(d.payload.doc.data().birthday);
         return {
           ...d.payload.doc.data(),
+          birthday: new Date(bd.seconds*1000),
           id: d.payload.doc.id,
           ref: d.payload.doc.ref
         };
@@ -47,8 +49,8 @@ export class StudentService {
     return this.students;
   }
 
-  public addStudent(student: Student): void {
-    console.log('Implement addStudent in StudentService.');
+  public addStudent(s: Student): Promise<DocumentData> {
+    return this.studentCollection.add(s);
   }
 
   // Class Functions

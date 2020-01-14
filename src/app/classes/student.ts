@@ -1,9 +1,9 @@
-import { AngularFirestoreDocument, DocumentReference } from '@angular/fire/firestore';
+import { DocumentReference } from '@angular/fire/firestore';
 
 export class Student {
     name: string;
     birthday: Date;
-    classes_taken?: AngularFirestoreDocument[];
+    classes_taken: DocumentReference[];
     id?: string;
-    ref: DocumentReference;
+    ref?: DocumentReference;
 }
