@@ -116,6 +116,14 @@
                         </div>
                     </div>
                 </form>
+                <br/>
+                <h5 class="modal-title">Classes Taken</h5>
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let class of selected_student_classes">
+                        {{ class.name }}
+                    </li>
+                </ul>
+                <hr/>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal" (click)="saveStudent()">Save and Close</button>

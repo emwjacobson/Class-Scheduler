@@ -3,7 +3,7 @@ import { StudentService } from 'src/app/services/student.service';
 import { Student } from 'src/app/classes/student';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { DocumentData, AngularFirestoreDocument, DocumentReference } from '@angular/fire/firestore';
+import { DocumentData, AngularFirestoreDocument, DocumentReference, DocumentSnapshot } from '@angular/fire/firestore';
 import { Class } from 'src/app/classes/class';
 import { firestore } from 'firebase/app';
 
@@ -19,6 +19,7 @@ export class StudentsComponent implements OnInit, OnDestroy {
   student_sub: Subscription;
   add_student_form: FormGroup;
   selected_student: Student;
+  selected_student_classes: Class[];
 
   all_classes: Class[];
   filtered_classes: Class[];
@@ -35,6 +36,7 @@ export class StudentsComponent implements OnInit, OnDestroy {
     this.filtered_students = [];
     this.all_classes = [];
     this.filtered_classes = [];
+    this.selected_student_classes = [];
 
     this.add_student_form = new FormGroup({
       name: new FormControl('', [
@@ -104,6 +106,16 @@ export class StudentsComponent implements OnInit, OnDestroy {
     this.selected_student = s;
     this.filtered_classes = this.all_classes;
     this.filterTaken();
+    
+    this.selected_student_classes = [];
+    this.selected_student.classes_taken.forEach((doc: DocumentReference) => {
+      doc.get().then((val: DocumentSnapshot<DocumentData>) => {
+        this.selected_student_classes.push({
+          ...val.data() as Class,
+          id: val.id
+        });
+      });
+    });
   }
 
   addClassToStudent(): void {
